@@ -1,0 +1,14 @@
+#bin/bash
+
+
+docker images -a
+
+docker rmi  a42268123a7f -f
+
+# build image
+docker build -t blazingpizza:latest .
+
+# run image
+docker run -d -p 8080:80 blazingpizza:latest
+
+docker run -p 8080:80 blazingpizza:latest
