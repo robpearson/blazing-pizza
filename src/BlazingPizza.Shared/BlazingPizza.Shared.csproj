@@ -1,9 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+  <!-- <PropertyGroup>
     <TargetFramework>$(TargetFrameworkVersion)</TargetFramework>
     <RootNamespace>BlazingPizza</RootNamespace>
 		<ImplicitUsings>true</ImplicitUsings>
+  </PropertyGroup> -->
+
+ <PropertyGroup>    
+     <TargetFramework>net7.0</TargetFramework>
+     <RootNamespace>BlazingPizza</RootNamespace>
+     <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 
 	<ItemGroup>
