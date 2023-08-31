@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /
 COPY ["Directory.Build.props", "./"]
 COPY ["src", "./src"]
+
 WORKDIR /src/BlazingPizza.Server
 RUN dotnet restore "BlazingPizza.Server.csproj"
 RUN dotnet build "BlazingPizza.Server.csproj" -c Release -o /app/build
