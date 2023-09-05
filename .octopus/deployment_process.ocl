@@ -49,15 +49,6 @@ step "deploy-blazing-pizza" {
             image = "octopuslabs/k8s-workertools:latest-ubuntu.2204"
         }
 
-        git_dependencies {
-            default_branch = "main"
-            git_credential_type = "Anonymous"
-            is_primary_git_reference = true
-            name = ""
-            repository_uri = "https://github.com/AaronSaikovski/blazor-demo.git"
-            step_package_inputs_reference_id = "153859dc-d2bd-45a2-badc-333efc792877"
-        }
-
         inputs {
             overlayPath = "overlays/octopus"
 
