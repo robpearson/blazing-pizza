@@ -1,0 +1,142 @@
+step "production-approval" {
+    name = "Production Approval"
+
+    action {
+        action_type = "Octopus.Manual"
+        environments = ["production"]
+        properties = {
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Can you approve the deployment of this release to production?"
+            Octopus.Action.Manual.ResponsibleTeamIds = "space-managers"
+        }
+    }
+}
+
+step "update-database" {
+    name = "Update Database"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Script.ScriptBody = "Write-Host \"Updating database ...\""
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+        }
+        worker_pool = "hosted-windows"
+    }
+}
+
+step "deploy-order-service-legacy" {
+    name = "Deploy Payment Service (Legacy)"
+    properties = {
+        Octopus.Action.TargetRoles = "web"
+    }
+
+    action {
+        action_type = "Octopus.IIS"
+        is_disabled = true
+        properties = {
+            Octopus.Action.AutoRetry.MaximumCount = "3"
+            Octopus.Action.EnabledFeatures = "Octopus.Features.IISWebSite,Octopus.Features.ConfigurationVariables"
+            Octopus.Action.ExecutionTimeout.Minutes = "5"
+            Octopus.Action.IISWebSite.ApplicationPoolFrameworkVersion = "v4.0"
+            Octopus.Action.IISWebSite.ApplicationPoolIdentityType = "ApplicationPoolIdentity"
+            Octopus.Action.IISWebSite.ApplicationPoolName = "OrderService-#{Octopus.Environment.Name}AppPool"
+            Octopus.Action.IISWebSite.Bindings = "[{\"protocol\":\"http\",\"port\":\"80\",\"host\":\"\",\"thumbprint\":null,\"certificateVariable\":null,\"requireSni\":\"False\",\"enabled\":\"True\"}]"
+            Octopus.Action.IISWebSite.CreateOrUpdateWebSite = "True"
+            Octopus.Action.IISWebSite.DeploymentType = "webSite"
+            Octopus.Action.IISWebSite.EnableAnonymousAuthentication = "True"
+            Octopus.Action.IISWebSite.EnableBasicAuthentication = "False"
+            Octopus.Action.IISWebSite.EnableWindowsAuthentication = "False"
+            Octopus.Action.IISWebSite.StartApplicationPool = "True"
+            Octopus.Action.IISWebSite.StartWebSite = "True"
+            Octopus.Action.IISWebSite.WebApplication.ApplicationPoolFrameworkVersion = "v4.0"
+            Octopus.Action.IISWebSite.WebApplication.ApplicationPoolIdentityType = "ApplicationPoolIdentity"
+            Octopus.Action.IISWebSite.WebRootType = "packageRoot"
+            Octopus.Action.IISWebSite.WebSiteName = "OrderService-#{Octopus.Environment.Name}"
+            Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings = "True"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.PackageId = "sadf"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "sadf"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "deploy-blazing-pizza" {
+    name = "Deploy Blazing Pizza"
+    package_requirement = "AfterPackageAcquisition"
+    properties = {
+        Octopus.Action.TargetRoles = "k8s"
+    }
+
+    action {
+        action_type = "kustomize"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            OctopusUseBundledTooling = "False"
+        }
+        step_package_version = "1.0.10"
+        worker_pool = "hosted-ubuntu"
+
+        container {
+            feed = "dockerhub"
+            image = "octopuslabs/k8s-workertools:latest-ubuntu.2204"
+        }
+
+        git_dependencies {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-81"
+            git_credential_type = "Library"
+            is_primary_git_reference = true
+            name = ""
+            repository_uri = "https://github.com/AaronSaikovski/blazor-demo.git"
+            step_package_inputs_reference_id = ""
+        }
+
+        inputs {
+            overlayPath = "overlays/octopus"
+
+            gitSource {}
+
+            kubernetesObjectStatus {
+                enabled = true
+                timeout = 180
+                waitForJobs = false
+            }
+
+            substituteFiles {
+                filesToTarget = "**/*.yaml"
+            }
+        }
+    }
+}
+
+step "slack-notification" {
+    name = "Post Slack Update"
+
+    action {
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            Octopus.Action.Template.Id = "ActionTemplates-281"
+            Octopus.Action.Template.Version = "15"
+            ssn_Channel = "#production-notifications"
+            ssn_Color = "good"
+            ssn_HookUrl = "#{Slack.Webook.Url}"
+            ssn_IconUrl = "https://octopus.com/content/resources/favicon.png"
+            ssn_Title = ":rocket: #{Octopus.Project.Name} #{Octopus.Release.Number} has been deployed to PROD."
+            ssn_Username = "Octopus Deploy"
+        }
+        worker_pool = "hosted-windows"
+    }
+}

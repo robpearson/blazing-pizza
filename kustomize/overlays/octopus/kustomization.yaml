@@ -1,0 +1,10 @@
+namePrefix: #{project.environment}-
+commonLabels:
+  variant: project.environment
+  org: acmeCorporation
+commonAnnotations:
+  note: Hello, I am #{project.environment}!
+resources:
+- ../../base
+patchesStrategicMerge:
+- deployment.yaml
