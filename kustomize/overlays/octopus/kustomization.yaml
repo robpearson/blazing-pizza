@@ -1,9 +1,9 @@
-namePrefix: production-
+namePrefix: #{project.environment}-
 commonLabels:
-  variant: production
+  variant: project.environment
   org: acmeCorporation
 commonAnnotations:
-  note: Hello, I am production!
+  note: Hello, I am #{project.environment}!
 resources:
 - ../../base
 patchesStrategicMerge:
