@@ -36,7 +36,6 @@ step "deploy-blazing-pizza" {
 
     action {
         action_type = "kustomize"
-        is_disabled = true
         properties = {
             Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
