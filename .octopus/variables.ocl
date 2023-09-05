@@ -1,0 +1,13 @@
+variable "Project.Environment" {
+    value "#{Octopus.Environment.Name}" {}
+}
+
+variable "Project.Replica.Count" {
+    value "5" {
+        environment = ["development", "test"]
+    }
+
+    value "10" {
+        environment = ["production"]
+    }
+}

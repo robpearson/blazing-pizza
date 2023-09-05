@@ -27,48 +27,8 @@ step "update-database" {
     }
 }
 
-step "deploy-blazing-pizza" {
-    name = "Deploy Blazing Pizza"
-    package_requirement = "AfterPackageAcquisition"
-    properties = {
-        Octopus.Action.TargetRoles = "k8s"
-    }
-
-    action {
-        action_type = "kustomize"
-        is_disabled = true
-        properties = {
-            Octopus.Action.RunOnServer = "true"
-            OctopusUseBundledTooling = "False"
-        }
-        step_package_version = "1.0.10"
-        worker_pool = "hosted-ubuntu"
-
-        container {
-            feed = "dockerhub"
-            image = "octopuslabs/k8s-workertools:latest-ubuntu.2204"
-        }
-
-        inputs {
-            overlayPath = "overlays/octopus"
-
-            gitSource {}
-
-            kubernetesObjectStatus {
-                enabled = true
-                timeout = 180
-                waitForJobs = false
-            }
-
-            substituteFiles {
-                filesToTarget = "**/*.yaml"
-            }
-        }
-    }
-}
-
 step "deploy-order-service-legacy" {
-    name = "Deploy Order Service (Legacy)"
+    name = "Deploy Payment Service (Legacy)"
     properties = {
         Octopus.Action.TargetRoles = "web"
     }
@@ -108,6 +68,45 @@ step "deploy-order-service-legacy" {
             package_id = "sadf"
             properties = {
                 SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "deploy-blazing-pizza" {
+    name = "Deploy Blazing Pizza"
+    package_requirement = "AfterPackageAcquisition"
+    properties = {
+        Octopus.Action.TargetRoles = "k8s"
+    }
+
+    action {
+        action_type = "kustomize"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+            OctopusUseBundledTooling = "False"
+        }
+        step_package_version = "1.0.10"
+        worker_pool = "hosted-ubuntu"
+
+        container {
+            feed = "dockerhub"
+            image = "octopuslabs/k8s-workertools:latest-ubuntu.2204"
+        }
+
+        inputs {
+            overlayPath = "overlays/octopus"
+
+            gitSource {}
+
+            kubernetesObjectStatus {
+                enabled = true
+                timeout = 180
+                waitForJobs = false
+            }
+
+            substituteFiles {
+                filesToTarget = "**/*.yaml"
             }
         }
     }
