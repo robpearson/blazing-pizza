@@ -11,3 +11,17 @@ docker build -t blazingpizza:latest .
 
 # run image
 docker run -p 8080:80 blazingpizza:latest
+
+
+## Publish image - https://learn.microsoft.com/en-us/azure/container-instances/container-instances-tutorial-prepare-acr
+# login to ACR
+az acr login --name azenixwebinar.azurecr.io
+
+# Tag image with the login server of your container registry
+docker tag blazingpizza azenixwebinar.azurecr.io/blazingpizza:v1.0.0
+
+# Push image to Azure Container Registry
+docker push azenixwebinar.azurecr.io/blazingpizza:v1.0.0
+
+# List images in ACR
+az acr repository list --name azenixwebinar.azurecr.io --output table
