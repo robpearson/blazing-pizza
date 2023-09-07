@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag blazingpizza:1.0.${{github.run_number}}
+      run: cd src; docker build . --file ./src/Dockerfile --tag blazingpizza:1.0.${{github.run_number}}
     - name: ACR Login
       uses: Azure/docker-login@v1
       with:        
@@ -23,5 +23,5 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
     - name: Push to ACR
-      run: docker push docker push azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
+      run: docker push azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
       
