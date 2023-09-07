@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: '#{BlazingPizza.WebApp.ServiceName}'
+  namespace: '#{BlazingPizza.Cluster.Namespace}'
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: #{BlazingPizza.WebApp.HttpPort}
+      protocol: TCP
+  selector:
+    component: web
+    type: main
