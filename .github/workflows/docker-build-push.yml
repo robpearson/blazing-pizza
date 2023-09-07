@@ -23,4 +23,4 @@ jobs:
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
     - name: Push to ACR
-      run: docker push docker push azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
+    - run: docker push docker push azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
