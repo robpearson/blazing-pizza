@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag blazingpizza:1.0.${{github.run_number}}
+    - name: ACR Login
+    - uses: Azure/docker-login@v1
+      with:        
+        login-server: azenixwebinar.azurecr.io
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+        run: docker push docker push azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
