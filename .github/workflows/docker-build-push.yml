@@ -10,11 +10,16 @@ jobs:
 
   build:
 
+    env:
+      OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY  }}
+      OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
+      OCTOPUS_SPACE: 'Azenix'
+    
     runs-on: ubuntu-latest
     strategy:
       matrix:
         dotnet-version: [ '3.1.x', '6.0.x' ]
-
+    
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
@@ -37,4 +42,7 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
     - name: Push to ACR
       run: docker push azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
-      
+    - name: Create a release in Octopus Deploy 🐙
+      uses: OctopusDeploy/create-release-action@v3
+      with:
+        project: 'Blazing Pizza'
