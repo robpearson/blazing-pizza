@@ -1,0 +1,46 @@
+variable "BlazingPizza.Cluster.Namespace" {
+    value "blazing-pizza-#{Octopus.Environment.Name | Replace \"[^a-zA-Z]+\" \"-\" | ToLower}" {}
+}
+
+variable "BlazingPizza.WebApp.HttpPort" {
+    value "5000" {}
+}
+
+variable "BlazingPizza.WebApp.ServiceName" {
+    value "blazing-pizza" {}
+}
+
+variable "PaymentService.Certificate" {
+    type = "Certificate"
+
+    value "Certificates-21" {
+        environment = ["dev", "test"]
+    }
+
+    value "Certificates-22" {
+        description = ""
+        environment = ["production"]
+    }
+}
+
+variable "PaymentService.DatabaseName" {
+    value {}
+}
+
+variable "PaymentService.Host" {
+    value "azenix-webinar.australiaeast.cloudapp.azure.com" {}
+}
+
+variable "PaymentService.Http.Port" {
+    value "8081" {
+        environment = ["dev"]
+    }
+
+    value "8082" {
+        environment = ["test"]
+    }
+
+    value "443" {
+        environment = ["production"]
+    }
+}
