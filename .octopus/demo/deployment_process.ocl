@@ -18,3 +18,36 @@ step "hello-world-using-powershell" {
         }
     }
 }
+
+step "deploy-k8s-load-balancer" {
+    name = "Deploy K8s Load Balancer"
+    properties = {
+        Octopus.Action.TargetRoles = "k8s"
+    }
+
+    action {
+        action_type = "Octopus.KubernetesDeployRawYaml"
+        properties = {
+            Octopus.Action.Kubernetes.DeploymentTimeout = "180"
+            Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
+            Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "https://github.com/robpearson/blazing-pizza.git"
+            Octopus.Action.Package.JsonConfigurationVariablesTargets = "**/*.{yml,yaml}"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "hosted-ubuntu"
+
+        container {
+            feed = "docker-hub"
+            image = "octopusdeploy/worker-tools:6.0.1-ubuntu.22.04"
+        }
+
+        git_dependencies {
+            default_branch = "main"
+            file_path_filters = ["https://github.com/robpearson/blazing-pizza.git"]
+            git_credential_id = "GitCredentials-286"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/robpearson/blazing-pizza.git"
+        }
+    }
+}
