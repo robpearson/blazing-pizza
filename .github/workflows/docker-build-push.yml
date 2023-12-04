@@ -13,7 +13,7 @@ jobs:
     env:
       OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY  }}
       OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
-      OCTOPUS_SPACE: 'Azenix'
+      OCTOPUS_SPACE: 'Rob Pearson'
     
     runs-on: ubuntu-latest
     strategy:
@@ -33,7 +33,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal ./src
     - name: Build the Docker image
-      run: cd src; docker build . --file ./Dockerfile --tag azenixwebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
+      run: cd src; docker build . --file ./Dockerfile --tag devtoolswebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
     - name: ACR Login
       uses: Azure/docker-login@v1
       with:        
