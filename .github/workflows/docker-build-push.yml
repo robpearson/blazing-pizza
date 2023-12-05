@@ -2,9 +2,7 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "rp-add-jira-build-info", "PIZZA-5-Update-HomePage-Copy" ]
 
 jobs:
 
