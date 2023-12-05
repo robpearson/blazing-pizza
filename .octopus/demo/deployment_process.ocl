@@ -25,6 +25,7 @@ step "deploy-k8s-load-balancer" {
             Octopus.Action.Kubernetes.DeploymentTimeout = "180"
             Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
             Octopus.Action.KubernetesContainers.CustomResourceYamlFileName = "k8s/service.yaml"
+            Octopus.Action.KubernetesContainers.Namespace = "#{BlazingPizza.Cluster.Namespace}"
             Octopus.Action.Package.JsonConfigurationVariablesTargets = "**/*.{yml,yaml}"
             Octopus.Action.Script.ScriptSource = "GitRepository"
             OctopusUseBundledTooling = "False"
