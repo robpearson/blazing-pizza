@@ -1,20 +1,13 @@
-step "hello-world-using-powershell" {
-    name = "Hello world (using PowerShell)"
+step "production-approval" {
+    name = "Production Approval"
 
     action {
-        action_type = "Octopus.Script"
-        is_required = true
+        action_type = "Octopus.Manual"
+        environments = ["production"]
         properties = {
-            Octopus.Action.RunOnServer = "true"
-            Octopus.Action.Script.ScriptBody = <<-EOT
-                Write-Host 'Hello world, using PowerShell'
-                
-                #TODO: Experiment with steps of your own :)
-                
-                Write-Host '[Learn more about the types of steps available in Octopus](https://oc.to/OnboardingAddStepsLearnMore)'
-                EOT
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
+            Octopus.Action.Manual.BlockConcurrentDeployments = "False"
+            Octopus.Action.Manual.Instructions = "Please confirm that this production deployment has an approved change request."
+            Octopus.Action.Manual.ResponsibleTeamIds = "ecomm-team-approvers"
         }
     }
 }
