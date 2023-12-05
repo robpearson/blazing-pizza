@@ -1,0 +1,11 @@
+variable "BlazingPizza.WebApp.ServiceName" {
+    value "blazing-pizza" {}
+}
+
+variable "BlazingPizza.WebApp.HttpPort" {
+    value "5000" {}
+}
+
+variable "BlazingPizza.Cluster.Namespace" {
+    value "blazing-pizza-#{Octopus.Environment.Name | Replace \"[^a-zA-Z]+\" \"-\" | ToLower}" {}
+}
