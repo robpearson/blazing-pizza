@@ -8,6 +8,7 @@ step "production-approval" {
             Octopus.Action.Manual.BlockConcurrentDeployments = "False"
             Octopus.Action.Manual.Instructions = "Please confirm that this production deployment has an approved change request."
             Octopus.Action.Manual.ResponsibleTeamIds = "ecomm-team-approvers"
+            Octopus.Action.RunOnServer = "false"
         }
     }
 }
@@ -15,7 +16,7 @@ step "production-approval" {
 step "deploy-k8s-load-balancer" {
     name = "Deploy K8s Load Balancer"
     properties = {
-        Octopus.Action.TargetRoles = "k8s"
+        Octopus.Action.TargetRoles = "k8s-pizzashop"
     }
 
     action {
@@ -48,7 +49,7 @@ step "deploy-k8s-load-balancer" {
 step "deploy-kubernetes-containers" {
     name = "Deploy Kubernetes containers"
     properties = {
-        Octopus.Action.TargetRoles = "k8s"
+        Octopus.Action.TargetRoles = "k8s-pizzashop"
     }
 
     action {
