@@ -54,7 +54,6 @@ jobs:
     - name: Deploy a release in Octopus Deploy 🐙
       uses: OctopusDeploy/deploy-release-action@v3
       with:
-        space: 'SSW'
         project: 'Blazing Pizza Shop'
         release_number: ${{ steps.create_release.outputs.release_number }}
         environments: Development
