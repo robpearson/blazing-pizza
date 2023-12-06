@@ -11,16 +11,16 @@ variable "BlazingPizza.Cluster.Namespace" {
 }
 
 variable "Legacy.PaymentService.HttpPort" {
-    value "443" {
-        environment = ["production"]
-    }
-
     value "8081" {
         environment = ["development"]
     }
 
     value "8082" {
         environment = ["test"]
+    }
+
+    value "8088" {
+        environment = ["production"]
     }
 }
 
