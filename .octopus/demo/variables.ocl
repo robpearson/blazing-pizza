@@ -44,6 +44,28 @@ variable "Legacy.PaymentService.WebsiteName" {
     value "PaymentService-#{Octopus.Environment.Name}" {}
 }
 
-variable "AzureSql.DatabaseConnectionString" {
-    value "TODO" {}
+variable "Azure.Database.User" {
+    value "mycompany-db-admin" {}
+}
+
+variable "Azure.Database.Server" {
+    value "tcp:mycompany-blazing-pizza.database.windows.net,1433;" {}
+}
+
+variable "Azure.Database.Name" {
+    value "dev-pizza-database" {
+        environment = ["development"]
+    }
+
+    value "test-pizza-database" {
+        environment = ["test"]
+    }
+
+    value "pizza-shop-database" {
+        environment = ["production"]
+    }
+}
+
+variable "Azure.DatabaseConnectionString" {
+    value "Server=#{Azure.Database.Server};Initial Catalog=#{Azure.Database.Name};Persist Security Info=False;User ID=#{Azure.Database.User};Password=#{Azure.Database.UserPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" {}
 }
