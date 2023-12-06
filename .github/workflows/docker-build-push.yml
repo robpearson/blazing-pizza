@@ -6,6 +6,12 @@ on:
       - main
       - PIZZA-**
 
+permissions:
+  contents: write
+  id-token: write
+  actions: write
+  checks: write
+
 jobs:
 
   build:
