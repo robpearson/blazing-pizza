@@ -11,8 +11,6 @@ jobs:
   build:
 
     env:
-      OCTOPUS_API_KEY: ${{ secrets.OCTOPUS_API_KEY  }}
-      OCTOPUS_URL: ${{ secrets.OCTOPUS_URL }}
       OCTOPUS_SPACE: 'Rob Pearson'
     
     runs-on: ubuntu-latest
@@ -42,6 +40,11 @@ jobs:
         password: ${{ secrets.ACR_PASSWORD }}
     - name: Push to ACR
       run: docker push devtoolswebinar.azurecr.io/blazingpizza:1.0.${{github.run_number}}
+    - name: Login to Octopus Deploy 
+      uses: OctopusDeploy/login@v1
+      with: 
+        server: https://demo.octopus.app
+        service_account_id: 0a9331d6-662d-4163-aecd-77ef5d3414cb
     - name: Push build information to Octopus Deploy 🐙
       uses: OctopusDeploy/push-build-information-action@v3
       with:
