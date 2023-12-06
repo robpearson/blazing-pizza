@@ -69,3 +69,7 @@ variable "Azure.Database.Name" {
 variable "Azure.DatabaseConnectionString" {
     value "Server=#{Azure.Database.Server};Initial Catalog=#{Azure.Database.Name};Persist Security Info=False;User ID=#{Azure.Database.User};Password=#{Azure.Database.UserPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" {}
 }
+
+variable "Slack.Channel" {
+    value "#production-notifications" {}
+}
