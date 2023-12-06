@@ -19,7 +19,7 @@ step "update-database" {
     action {
         action_type = "Octopus.Script"
         properties = {
-            Octopus.Action.Script.ScriptBody = "Write-Host \"Updating database ...\""
+            Octopus.Action.Script.ScriptBody = "Write-Host \"Updating database (Server:$OctopusParameters[\"Azure.Database.Server\"]  Database: $OctopusParameters[\"Azure.Database.Name\"]}) ...\""
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
         }
@@ -58,6 +58,7 @@ step "deploy-payment-service-legacy" {
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "octopus-server-built-in"
             Octopus.Action.Package.PackageId = "PaymentService"
+            Octopus.Action.RunOnServer = "false"
         }
         worker_pool_variable = ""
 
