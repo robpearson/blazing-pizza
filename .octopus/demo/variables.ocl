@@ -9,3 +9,41 @@ variable "BlazingPizza.WebApp.HttpPort" {
 variable "BlazingPizza.Cluster.Namespace" {
     value "blazing-pizza-#{Octopus.Environment.Name | Replace \"[^a-zA-Z]+\" \"-\" | ToLower}" {}
 }
+
+variable "Legacy.PaymentService.HttpPort" {
+    value "443" {
+        environment = ["production"]
+    }
+
+    value "8081" {
+        environment = ["development"]
+    }
+
+    value "8082" {
+        environment = ["test"]
+    }
+}
+
+variable "Legacy.PaymentService.AppPoolName" {
+    value "PaymentServicePool-#{Octopus.Environment.Name}" {}
+}
+
+variable "Legacy.PaymentService.Certificate" {
+    type = "Certificate"
+
+    value "Certificates-181" {
+        environment = ["production"]
+    }
+
+    value "Certificates-182" {
+        environment = ["development", "test"]
+    }
+}
+
+variable "Legacy.PaymentService.WebsiteName" {
+    value "PaymentService-#{Octopus.Environment.Name}" {}
+}
+
+variable "AzureSql.DatabaseConnectionString" {
+    value "TODO" {}
+}
